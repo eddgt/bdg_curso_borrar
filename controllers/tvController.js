@@ -10,6 +10,11 @@ const tvShows = [
         titulo: 'LQ2',
         anio: 2015,
         pais: 'GT'
+    },{
+        Id: 3,
+        titulo: 'LQ2',
+        anio: 2015,
+        pais: 'GT'
     }
 ];
 
