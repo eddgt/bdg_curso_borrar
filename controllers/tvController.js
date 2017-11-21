@@ -1,3 +1,6 @@
+const mongoose = require('mongoose');
+const TVShow = mongoose.model('TVShow');
+
 const obj = {};
 const tvShows = [
     {  
@@ -14,12 +17,19 @@ const tvShows = [
 ];
 
 obj.getArray =  (req, res, next)=>{       
-    res.send(tvShows);
+    //res.send(tvShows);
+    TVShow.find((err, res) => { 
+        if(err){
+            res.send({error: err});
+        }
+        res.send(res);
+    });
 };
 
 obj.postArray = (req, res, next)=>{ 
     tvShows.push(buildTVShow(tvShows.length, req.body));      
     res.send(tvShows);
+    TVShow.create(,)
 };
 
 obj.getById = (req, res, next)=>{
