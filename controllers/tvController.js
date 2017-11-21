@@ -1,66 +1,71 @@
 const mongoose = require('mongoose');
 const TVShow = mongoose.model('TVShow');
-
 const obj = {};
-const tvShows = [
-    {  
-        Id: 1,
-        titulo: 'LQ1',
-        anio: 2017,
-        pais: 'USA'
-    },{
-        Id: 2,
-        titulo: 'LQ2',
-        anio: 2015,
-        pais: 'GT'
-    }
-];
 
-obj.getArray =  (req, res, next)=>{       
-    //res.send(tvShows);
-    TVShow.find((err, res) => { 
+const todos = (callback)=>{
+    TVShow.find((err, tvshows) => { 
         if(err){
-            res.send({error: err});
+            return callback({error: err}, null);
         }
-        res.send(res);
+        callback(null, tvshows);
     });
 };
 
-obj.postArray = (req, res, next)=>{ 
-    tvShows.push(buildTVShow(tvShows.length, req.body));      
-    res.send(tvShows);
-    TVShow.create(,)
+obj.getArray =  (req, res, next)=>{
+    /*TVShow.find((err, tvshows) => { 
+        if(err){
+            return res.send({error: err});
+        }
+        res.send(tvshows);
+    });*/
+    todos((error, result) =>{
+        if(error){
+            return res.send({error: error});
+        }
+        res.send(result);
+    });
+};
+
+obj.postArray = (req, res, next)=>{
+    let newTVShow = new TVShow({
+        titulo: req.body.titulo,
+        anio: req.body.anio,
+        pais: req.body.pais
+    });
+
+    newTVShow.save((err, result) => {
+        if(err){
+            return res.send({error: err});
+        }
+        res.send(result);
+    });
 };
 
 obj.getById = (req, res, next)=>{
-    let tvFind = tvShows.find((tvShow) => tvShow.Id === Number.parseInt(req.params.id));
-
-    if(!tvFind){
-        return res.send({error: `Show: ${req.params.id}, no encontrado`});
-        //return res.send({error: 'Show: ' + req.params.id +', no encontrado'});
-    }
-
-    res.send(tvFind);
+    TVShow.findById(req.params.id, (err, tvshow) => {
+        if(err){
+            return res.send({error: err});
+        }
+        res.send(tvshow);
+    });
 }
 
 obj.deleteTVShow = (req, res, next) => {
-    let indexTvShow = tvShows.findIndex((tvShow) => tvShow.Id === Number.parseInt(req.params.id));
-    if(indexTvShow < 0){
-        return res.send({error: `Id: ${req.params.id}, no encontrado`});
-    }    
-    res.send(tvShows.splice(indexTvShow, 1));
+    TVShow.findByIdAndRemove(req.params.id, (err, result) => {
+        if(err){
+            return res.send({error: err});
+        }
+        res.send(result);
+    });
 }
 
 obj.updateTVShow = (req, res, next) => {
-    let indexTvShow = tvShows.findIndex((tvShow) => tvShow.Id === Number.parseInt(req.params.id));
-    if(indexTvShow < 0){
-        return res.send({error: `Id: ${req.params.id}, no encontrado`});
-    }
-    let tvShow = tvShows[indexTvShow];
-
-    tvShow = buildTVShow(indexTvShow, req.body);
-    tvShows[indexTvShow] = tvShow;
-    res.send(tvShows);
+    TVShow.findByIdAndUpdate(req.params.id, req.body, (err, result) => {
+        if(err){
+            return res.send(err);
+        }
+        res.send(result);
+    });
 };
 
 const buildTVShow = (id, body) => {
