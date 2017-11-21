@@ -21,6 +21,8 @@ mongoose.connect('mongodb://localhost/curso_bdg', { useMongoClient: true }, (err
   console.log('Conectado a Mongo');
 });
 
+require('./models/TVShow')(app, mongoose);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
