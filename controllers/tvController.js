@@ -5,25 +5,30 @@ const obj = {};
 const todos = (callback)=>{
     TVShow.find((err, tvshows) => { 
         if(err){
-            return callback({error: err}, null);
+            return callback({error: err});
         }
         callback(null, tvshows);
     });
 };
 
 obj.getArray =  (req, res, next)=>{
-    /*TVShow.find((err, tvshows) => { 
-        if(err){
-            return res.send({error: err});
-        }
-        res.send(tvshows);
-    });*/
-    todos((error, result) =>{
+
+    TVShow.find()
+    .then(tvshows => {
+        return res.send(tvshows);
+    })
+    .catch(err => {
+        return res.send({error: err});        
+    });
+
+    
+    /*todos((error, result) =>{
         if(error){
             return res.send({error: error});
         }
         res.send(result);
-    });
+    });*/
+
 };
 
 obj.postArray = (req, res, next)=>{
