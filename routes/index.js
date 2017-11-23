@@ -12,5 +12,7 @@ router.post('/test', controllers.tvController.postArray);
 router.delete('/test/:id', controllers.tvController.deleteTVShow);
 router.put('/test/:id', controllers.tvController.updateTVShow);
 router.get('/c2', controllers.controller2.getArray2);
+router.post('/createToken', controllers.tokenController.crearToken);
+router.get('/validateToken/:token', controllers.tokenController.validarToken);
 
 module.exports = router;

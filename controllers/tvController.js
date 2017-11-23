@@ -2,33 +2,10 @@ const mongoose = require('mongoose');
 const TVShow = mongoose.model('TVShow');
 const obj = {};
 
-const todos = (callback)=>{
-    TVShow.find((err, tvshows) => { 
-        if(err){
-            return callback({error: err});
-        }
-        callback(null, tvshows);
-    });
-};
-
 obj.getArray =  (req, res, next)=>{
-
     TVShow.find()
-    .then(tvshows => {
-        return res.send(tvshows);
-    })
-    .catch(err => {
-        return res.send({error: err});        
-    });
-
-    
-    /*todos((error, result) =>{
-        if(error){
-            return res.send({error: error});
-        }
-        res.send(result);
-    });*/
-
+    .then(resultado => res.send(resultado))
+    .catch(err => res.send({error: err}));
 };
 
 obj.postArray = (req, res, next)=>{
@@ -38,39 +15,29 @@ obj.postArray = (req, res, next)=>{
         pais: req.body.pais
     });
 
-    newTVShow.save((err, result) => {
-        if(err){
-            return res.send({error: err});
-        }
-        res.send(result);
-    });
+    newTVShow.save()
+    .then(result => res.send(result))
+    .catch(err => res.send({error: err}));
 };
 
 obj.getById = (req, res, next)=>{
-    TVShow.findById(req.params.id, (err, tvshow) => {
-        if(err){
-            return res.send({error: err});
-        }
-        res.send(tvshow);
-    });
+
+    TVShow.findById(req.params.id)
+    .then(result => res.send(result))
+    .catch(err => res.send({error: err}));
 }
 
 obj.deleteTVShow = (req, res, next) => {
-    TVShow.findByIdAndRemove(req.params.id, (err, result) => {
-        if(err){
-            return res.send({error: err});
-        }
-        res.send(result);
-    });
+    TVShow.findByIdAndRemove(req.params.id)
+    .then(result => res.send(result))
+    .catch(err => res.send({error: err}));
 }
 
 obj.updateTVShow = (req, res, next) => {
-    TVShow.findByIdAndUpdate(req.params.id, req.body, (err, result) => {
-        if(err){
-            return res.send(err);
-        }
-        res.send(result);
-    });
+
+    TVShow.findByIdAndUpdate(req.params.id, req.body)
+    .then(result => res.send(result))
+    .catch(err => res.send({error: err}));
 };
 
 const buildTVShow = (id, body) => {
